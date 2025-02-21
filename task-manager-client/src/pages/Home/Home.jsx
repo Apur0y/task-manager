@@ -1,10 +1,19 @@
+import { Link } from "react-router-dom";
 import Done from "../../component/Done";
 import InProcess from "../../component/InProcess";
+import TaskCard from "../../component/TaskCard";
 import Todo from "../../component/Todo";
 
 const Home = () => {
+
+
+
+
+
+
   return (
     <div className="min-h-screen bg-gray-100 p-10">
+
       {/* Hero Section */}
       <header className="text-center">
         <h1 className="text-4xl font-extrabold text-gray-800">🚀 To-Do Task Manager</h1>
@@ -17,8 +26,14 @@ const Home = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
         {/* To-Do Column */}
         <div className="bg-white p-5 shadow-lg rounded-lg">
-          <h2 className="text-xl font-semibold text-gray-700">📌 To-Do</h2>
+         <div className="flex justify-between">
+         <h2 className="text-xl font-semibold text-gray-700">📌 To-Do</h2>
+         <button className="btn">
+          <Link to='/addtask'>Add</Link>
+          </button>
+         </div>
           <Todo />
+          <TaskCard></TaskCard>
         </div>
 
         {/* In-Progress Column */}

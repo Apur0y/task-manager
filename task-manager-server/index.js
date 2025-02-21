@@ -1,7 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const PORT = process.env.PORT || 5000;
+
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 
 app.use(cors())
@@ -25,7 +28,60 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
+// Real-time WebSocket connection
+// io.on('connection', (socket) => {
+//   console.log('New client connected');
+//   socket.on('disconnect', () => console.log('Client disconnected'));
+// });
 
+// Routes
+
+const tasksCollection = client.db("TaskManager").collection("tasks")
+app.post('/tasks', async (req, res) => {
+
+
+  try {
+    const task = req.body;
+
+    const result = await tasksCollection.insertOne(task);
+    // io.emit("taskUpdated", task);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get('/tasks', async (req, res) => {
+  try {
+    const tasks = await tasksCollection.find().toArray();
+    res.json(tasks);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.put('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, description, category } = req.body;
+    await tasksCollection.updateOne({ _id: new ObjectId(id), userId: req.user.uid }, { $set: { title, description, category } });
+    io.emit("taskUpdated", { id, title, description, category });
+    res.json({ message: "Task updated" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.delete('/tasks/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await tasksCollection.deleteOne({ _id: new ObjectId(id)  });
+    // io.emit("taskDeleted", id);
+    res.json({ message: "Task deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+})
 
 
 
@@ -41,5 +97,9 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get('/', (req,res)=>{
+  res.send("Task is running")
+})
 
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 //tasks  g5QYNPin17dCcCYQ

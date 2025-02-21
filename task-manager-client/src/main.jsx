@@ -7,6 +7,7 @@ import AuthProvider from "./pages/AuthProvider/AuthProvider";
 import Layout from "./pages/MainLayout/Layout";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import AddTask from "./pages/AddTask/AddTask";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path:"/register",
     element:<Register></Register>
+  },
+  {
+    path:"/addtask",
+    element:<AddTask></AddTask>
   }
 ]);
 

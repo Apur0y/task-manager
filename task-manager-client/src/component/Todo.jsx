@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import TaskCard from "./TaskCard";
+import axios from "axios";
 
 const Todo = () => {
-  const [tasks, setTasks] = useState([
-    { _id: "1", title: "Complete React project", category: "To-Do" },
-    { _id: "2", title: "Fix API issues", category: "In Progress" },
-    { _id: "3", title: "Review PRs", category: "Todo" },
-  ]);
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(()=>{
+
+    axios.get("http://localhost:5000/tasks")
+    .then(res=>setTasks(res.data))
+
+  },[])
+  console.log(tasks);
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -31,7 +37,7 @@ const Todo = () => {
                       {...provided.dragHandleProps}
                       className="p-2 mb-2 bg-green-700 rounded shadow"
                     >
-                      {task.title}
+                     <TaskCard task={task}></TaskCard>
                     </li>
                   )}
                 </Draggable>
