@@ -53,7 +53,11 @@ app.post('/tasks', async (req, res) => {
 
 app.get('/tasks', async (req, res) => {
   try {
-    const tasks = await tasksCollection.find().toArray();
+    const category = req.query.category;
+
+    const tasks = category
+    ? await tasksCollection.find({category}).toArray() 
+    : await tasksCollection.find().toArray();
     res.json(tasks);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -63,9 +67,14 @@ app.get('/tasks', async (req, res) => {
 app.put('/tasks/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, category } = req.body;
-    await tasksCollection.updateOne({ _id: new ObjectId(id), userId: req.user.uid }, { $set: { title, description, category } });
-    io.emit("taskUpdated", { id, title, description, category });
+    console.log("Put id here",id);
+    const editedTask = req.body;
+    console.log("edit", editedTask);
+
+    const { title, description, category } = editedTask;
+console.log("title",title);
+    await tasksCollection.updateOne({ _id: new ObjectId(id) }, { $set: { title, description, category } });
+    // io.emit("taskUpdated", { id, title, description, category });
     res.json({ message: "Task updated" });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
@@ -83,6 +92,16 @@ app.delete('/tasks/:id', async (req, res) => {
   }
 })
 
+app.put("/tasks/reorder", async (req, res) => {
+  const { tasks } = req.body;
+  try {
+    // Update the order of tasks in the database
+    await tasksCollection.updateMany({}, tasks); // This is just an example, adjust according to your DB schema
+    res.status(200).send("Tasks reordered successfully");
+  } catch (error) {
+    res.status(500).send("Failed to reorder tasks");
+  }
+});
 
 
     // Connect the client to the server	(optional starting in v4.7)

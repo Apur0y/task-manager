@@ -6,13 +6,48 @@ import axios from "axios";
 const Todo = () => {
   const [tasks, setTasks] = useState([]);
 
-  useEffect(()=>{
+  // Function to fetch tasks
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/tasks?category=To-Do");
+      setTasks(res.data);
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+    }
+  };
 
-    axios.get("http://localhost:5000/tasks")
-    .then(res=>setTasks(res.data))
+  useEffect(() => {
+    // Initial fetch
+    fetchTasks();
 
-  },[])
-  console.log(tasks);
+    // Set up polling for real-time updates (every 3 seconds)
+    const intervalId = setInterval(fetchTasks, 1000);
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [tasks]);
+
+  // Handle task update (pass this to TaskCard)
+  const handleTaskUpdate = async (updatedTask) => {
+    // Update the local state immediately for better UX
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task._id === updatedTask._id ? updatedTask : task
+      )
+    );
+    
+    // Then fetch fresh data to ensure consistency
+    fetchTasks();
+  };
+
+  // Handle task deletion (pass this to TaskCard)
+  const handleTaskDelete = async (deletedTaskId) => {
+    // Update the local state immediately for better UX
+    setTasks(prevTasks => prevTasks.filter(task => task._id !== deletedTaskId));
+    
+    // Then fetch fresh data to ensure consistency
+    fetchTasks();
+  };
 
   const onDragEnd = (result) => {
     if (!result.destination) return;
@@ -27,7 +62,7 @@ const Todo = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="tasks" isDropDisabled={false}>
           {(provided) => (
-            <ul {...provided.droppableProps} ref={provided.innerRef} className="p-4  rounded">
+            <ul {...provided.droppableProps} ref={provided.innerRef} className="p-4 rounded">
               {tasks.map((task, index) => (
                 <Draggable key={task._id} draggableId={String(task._id)} index={index}>
                   {(provided) => (
@@ -37,7 +72,12 @@ const Todo = () => {
                       {...provided.dragHandleProps}
                       className="p-2 mb-2 bg-green-700 rounded shadow"
                     >
-                     <TaskCard task={task}></TaskCard>
+                      <TaskCard 
+                        key={task._id} 
+                        task={task}
+                        onTaskUpdate={handleTaskUpdate}
+                        onTaskDelete={handleTaskDelete}
+                      />
                     </li>
                   )}
                 </Draggable>

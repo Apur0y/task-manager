@@ -6,7 +6,10 @@ import Home from "../Home/Home";
 
 const Layout = () => {
 
-    const {user} = useContext(AuthContext)
+
+    const {user, loading} = useContext(AuthContext);
+
+    if(loading) return <span className="loading loading-ring text-center loading-lg"></span>
 
     return (
         <div>
