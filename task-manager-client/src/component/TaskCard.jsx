@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 
 const TaskCard = ({ task }) => {
 
-  console.log(task?._id);
   const [editedTask, setEditedTask] = useState({
     title:  "",
     description: task?.description || "",
@@ -13,7 +12,7 @@ const TaskCard = ({ task }) => {
   });
 
   const handleEdit = (task) => {
-    console.log(task);
+
     // Update the editedTask state with the clicked task's data
     setEditedTask({
       title: task?.title ,

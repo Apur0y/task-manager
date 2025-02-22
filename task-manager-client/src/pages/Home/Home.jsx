@@ -3,17 +3,23 @@ import Done from "../../component/Done";
 import InProcess from "../../component/InProcess";
 import TaskCard from "../../component/TaskCard";
 import Todo from "../../component/Todo";
+import { signOut } from "firebase/auth";
+import { auth } from "../AuthProvider/AuthProvider";
 
 const Home = () => {
 
-
+const handleSignOut=()=>{
+  signOut(auth)
+}
 
 
 
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-
+          <button
+          onClick={handleSignOut}
+          className="btn">Log Out</button>
       {/* Hero Section */}
       <header className="text-center">
         <h1 className="text-4xl font-extrabold text-gray-800">🚀 To-Do Task Manager</h1>
