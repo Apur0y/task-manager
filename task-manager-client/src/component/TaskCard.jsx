@@ -30,7 +30,7 @@ const TaskCard = ({ task }) => {
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
     try {
-      const res = await axios.put(`http://localhost:5000/tasks/${task._id}`, editedTask);
+      const res = await axios.put(`https://task-manager-server-ecru-five.vercel.app/tasks/${task._id}`, editedTask);
       console.log("Task updated successfully:", res.data);
       Swal.fire({
         title: "Success!",
@@ -62,7 +62,7 @@ const TaskCard = ({ task }) => {
 
     if (result.isConfirmed) {
       try {
-        await axios.delete(`http://localhost:5000/tasks/${id}`);
+        await axios.delete(`https://task-manager-server-ecru-five.vercel.app/tasks/${id}`);
         console.log("Task deleted successfully");
         Swal.fire({
           title: "Deleted!",

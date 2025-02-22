@@ -9,7 +9,7 @@ const InProcess = () => {
   // Function to fetch tasks
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/tasks?category=In Progress");
+      const res = await axios.get("https://task-manager-server-ecru-five.vercel.app/tasks?category=In Progress");
       setTasks(res.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);

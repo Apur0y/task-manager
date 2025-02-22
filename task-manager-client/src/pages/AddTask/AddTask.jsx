@@ -33,7 +33,7 @@ const AddTask = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:5000/tasks", newTask);
+      const response = await axios.post("https://task-manager-server-ecru-five.vercel.app/tasks", newTask);
       console.log("Task added:", response.data);
       toast("Task added successfully!");
 

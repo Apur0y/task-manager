@@ -9,7 +9,7 @@ const Done = () => {
   // Function to fetch tasks
   const fetchTasks = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/tasks?category=Done");
+      const res = await axios.get("https://task-manager-server-ecru-five.vercel.app/tasks?category=Done");
       setTasks(res.data);
     } catch (error) {
       console.error("Error fetching tasks:", error);

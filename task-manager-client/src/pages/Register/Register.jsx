@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { app } from "../../firebase.init"; // Ensure Firebase is initialized in this file
-import { Link, useNavigate } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ const Register = () => {
     password: "",
   });
   
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const auth = getAuth(app);
 
   const handleChange = (e) => {
@@ -32,7 +32,7 @@ const Register = () => {
         displayName: formData.name,
         photoURL: formData.photoURL,
       })
-      .then(user=>navigate('/'))
+ 
       
       console.log("User registered successfully:", user);
     } catch (error) {

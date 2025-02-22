@@ -14,7 +14,7 @@ app.use(express.json());
 
 
 
-const uri = "mongodb+srv://tasks:g5QYNPin17dCcCYQ@thelaststand.sh6jy.mongodb.net/?retryWrites=true&w=majority&appName=thelaststand";
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@thelaststand.sh6jy.mongodb.net/?retryWrites=true&w=majority&appName=thelaststand`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -121,4 +121,3 @@ app.get('/', (req,res)=>{
 })
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-//tasks  g5QYNPin17dCcCYQ
